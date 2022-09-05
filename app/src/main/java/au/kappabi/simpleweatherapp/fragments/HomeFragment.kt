@@ -20,7 +20,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         // Temporarily displaying json fetched data
         val textView = getView()?.findViewById<TextView>(R.id.textView)
         homeViewModel.listWeather.observe(viewLifecycleOwner) {
-            textView?.text = it
+            textView?.text = it.toString()
         }
     }
 }
