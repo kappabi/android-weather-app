@@ -2,11 +2,14 @@ package au.kappabi.simpleweatherapp.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import au.kappabi.simpleweatherapp.R
+import au.kappabi.simpleweatherapp.adapters.WeatherListAdapter
 import au.kappabi.simpleweatherapp.viewmodels.HomeViewModel
 
 /**
@@ -17,10 +20,31 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     val homeViewModel : HomeViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // Temporarily displaying json fetched data
-        val textView = getView()?.findViewById<TextView>(R.id.textView)
+
+        val textView = getView()?.findViewById<TextView>(R.id.noDataTextView)
+        val loadingSpinner = requireView().findViewById<ProgressBar>(R.id.loadingSpinner)
+        loadingSpinner?.visibility = View.VISIBLE
+        val recyclerView = getView()?.findViewById<RecyclerView>(R.id.homeRecyclerView)
+        recyclerView?.layoutManager = LinearLayoutManager(getView()?.context)
+
         homeViewModel.listWeather.observe(viewLifecycleOwner) {
-            textView?.text = it.toString()
+            // Set the text displayed when the list is empty
+            if (it.isEmpty()) {
+                textView?.text = getString(R.string.no_data_message)
+            }
+
+            // Populate the recycler view with the list of weather data
+            val adapter = WeatherListAdapter(it)
+            recyclerView?.adapter = adapter
+        }
+
+        // Put a loading spinner on the page while waiting for the weather data
+        homeViewModel.loaded.observe(viewLifecycleOwner) {
+            if (it == false) {
+                loadingSpinner?.visibility = View.VISIBLE
+            } else {
+                loadingSpinner?.visibility = View.GONE
+            }
         }
     }
 }

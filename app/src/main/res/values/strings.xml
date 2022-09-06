@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SimpleWeatherApp</string>
+    <string name="no_data_message">No data available.</string>
 </resources>

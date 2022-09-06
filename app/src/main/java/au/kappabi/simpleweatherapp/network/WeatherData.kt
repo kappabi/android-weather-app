@@ -14,6 +14,6 @@ data class WeatherData (
 
     @Json(name = "_name") val name : String,
     @Json(name = "_weatherTemp") val temp : Int?,
-    @Json(name = "_weatherLastUpdated") val lastUpdated : Int?
+    @Json(name = "_weatherLastUpdated") val lastUpdated : Long?
 
-) 
+)

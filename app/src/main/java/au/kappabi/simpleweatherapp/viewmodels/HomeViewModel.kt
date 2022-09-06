@@ -15,6 +15,10 @@ class HomeViewModel : ViewModel() {
 
     val listWeather: LiveData<List<WeatherData>> = _response
 
+    // Status of initialisation to display feedback to user.
+    private var _loaded = MutableLiveData<Boolean>(false)
+    var loaded: LiveData<Boolean> = _loaded
+
     /**
      * Initialisation of weather data
      */
@@ -29,11 +33,16 @@ class HomeViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val response = WeatherApi.retrofitService.getWeather()
+                // TODO Include only suburbs with temp data
                 _response.value = response.data
+                _loaded.value = true
             } catch (e: Exception) {
-                // TODO: Show meaningful error message to user
-                Log.e("Temp","Error retrieving data: ${e.message}")
+                // Setting list to empty triggers display of error message to user in fragment.
+                _response.value = emptyList()
+                _loaded.value = true
             }
         }
     }
+
+
 }
