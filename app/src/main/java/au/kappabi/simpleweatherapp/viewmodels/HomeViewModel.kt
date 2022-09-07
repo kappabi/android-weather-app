@@ -44,5 +44,28 @@ class HomeViewModel : ViewModel() {
         }
     }
 
+    fun sortAlphabetical() {
+        if (!listWeather.value.isNullOrEmpty()) {
+            val sortedWeather = listWeather.value as MutableList
+            sortedWeather.sortBy { it.name }
+            _response.value = sortedWeather
+        }
+    }
+
+    fun sortTemperature() {
+        if (!listWeather.value.isNullOrEmpty()) {
+            val sortedWeather = listWeather.value as MutableList
+            sortedWeather.sortByDescending { it.temp }
+            _response.value = sortedWeather
+        }
+    }
+
+    fun sortLastUpdated() {
+        if (!listWeather.value.isNullOrEmpty()) {
+            val sortedWeather = listWeather.value as MutableList
+            sortedWeather.sortByDescending { it.lastUpdated }
+            _response.value = sortedWeather
+        }
+    }
 
 }

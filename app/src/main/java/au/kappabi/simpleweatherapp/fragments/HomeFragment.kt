@@ -1,7 +1,9 @@
 package au.kappabi.simpleweatherapp.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -11,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import au.kappabi.simpleweatherapp.R
 import au.kappabi.simpleweatherapp.adapters.WeatherListAdapter
 import au.kappabi.simpleweatherapp.viewmodels.HomeViewModel
+import com.google.android.material.tabs.TabLayout
 
 /**
  * This fragment lists weather data according to suburb.
@@ -46,5 +49,23 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 loadingSpinner?.visibility = View.GONE
             }
         }
+
+        // Set up sorting tabs
+        val tabLayout = getView()?.findViewById<TabLayout>(R.id.tab)
+        tabLayout?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when(tab?.position) {
+                    0 -> homeViewModel.sortAlphabetical()
+                    1 -> homeViewModel.sortTemperature()
+                    2 -> homeViewModel.sortLastUpdated()
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+        })
     }
 }
