@@ -14,6 +14,7 @@ import au.kappabi.simpleweatherapp.R
 import au.kappabi.simpleweatherapp.adapters.WeatherListAdapter
 import au.kappabi.simpleweatherapp.viewmodels.HomeViewModel
 import com.google.android.material.tabs.TabLayout
+import java.time.format.DateTimeFormatter
 
 /**
  * This fragment lists weather data according to suburb.
@@ -67,5 +68,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             override fun onTabReselected(tab: TabLayout.Tab?) {
             }
         })
+
+        // Show date data was last retrieved
+        val dateRetrievedTextView = getView()?.findViewById<TextView>(R.id.dateRetrievedTextView)
+        homeViewModel.dateRetrieved.observe(viewLifecycleOwner) {
+            dateRetrievedTextView?.text = getString(R.string.data_retrieved) + ": ${it.format(DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy"))}"
+        }
     }
 }

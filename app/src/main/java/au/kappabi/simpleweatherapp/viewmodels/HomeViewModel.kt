@@ -8,12 +8,16 @@ import androidx.lifecycle.viewModelScope
 import au.kappabi.simpleweatherapp.network.WeatherApi
 import au.kappabi.simpleweatherapp.network.WeatherData
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.util.*
 
 class HomeViewModel : ViewModel() {
 
     private val _response = MutableLiveData<List<WeatherData>>()
+    private val _dateRetrieved = MutableLiveData<LocalDateTime>()
 
     val listWeather: LiveData<List<WeatherData>> = _response
+    val dateRetrieved: LiveData<LocalDateTime> = _dateRetrieved
 
     // Status of initialisation to display feedback to user.
     private var _loaded = MutableLiveData<Boolean>(false)
@@ -36,6 +40,7 @@ class HomeViewModel : ViewModel() {
                 // TODO Include only suburbs with temp data
                 _response.value = response.data
                 _loaded.value = true
+                _dateRetrieved.value = LocalDateTime.now()
             } catch (e: Exception) {
                 // Setting list to empty triggers display of error message to user in fragment.
                 _response.value = emptyList()
