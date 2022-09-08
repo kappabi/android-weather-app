@@ -25,7 +25,7 @@ class HomeViewModel : ViewModel() {
      * Initialisation of weather data
      */
     init {
-        getWeatherData(null)
+        getWeatherData(0) // Initially sorted alphabetically
     }
 
     /**
@@ -36,7 +36,7 @@ class HomeViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val response = WeatherApi.retrofitService.getWeather()
-                // TODO Include only suburbs with temp data
+                // TODO Include only suburbs with temperature data
                 _response.value = response.data
                 sortData(sortOption)
                 _loaded.value = true
