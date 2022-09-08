@@ -1,6 +1,5 @@
 package au.kappabi.simpleweatherapp.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,7 +8,6 @@ import au.kappabi.simpleweatherapp.network.WeatherApi
 import au.kappabi.simpleweatherapp.network.WeatherData
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
-import java.util.*
 
 class HomeViewModel : ViewModel() {
 
@@ -19,7 +17,7 @@ class HomeViewModel : ViewModel() {
     val listWeather: LiveData<List<WeatherData>> = _response
     val dateRetrieved: LiveData<LocalDateTime> = _dateRetrieved
 
-    // Status of initialisation to display feedback to user.
+    // Status of data retrieval to display feedback to user.
     private var _loaded = MutableLiveData<Boolean>(false)
     var loaded: LiveData<Boolean> = _loaded
 
@@ -27,18 +25,20 @@ class HomeViewModel : ViewModel() {
      * Initialisation of weather data
      */
     init {
-        getWeatherData()
+        getWeatherData(null)
     }
 
     /**
      * Function to retrieve weather data using retrofit api service
      */
-    private fun getWeatherData() {
+    fun getWeatherData(sortOption: Int?) {
+        _loaded.value = false
         viewModelScope.launch {
             try {
                 val response = WeatherApi.retrofitService.getWeather()
                 // TODO Include only suburbs with temp data
                 _response.value = response.data
+                sortData(sortOption)
                 _loaded.value = true
                 _dateRetrieved.value = LocalDateTime.now()
             } catch (e: Exception) {
@@ -46,6 +46,15 @@ class HomeViewModel : ViewModel() {
                 _response.value = emptyList()
                 _loaded.value = true
             }
+        }
+    }
+
+    // Sort data based on tab selected
+    fun sortData(pos: Int?) {
+        when(pos) {
+            0 -> sortAlphabetical()
+            1 -> sortTemperature()
+            2 -> sortLastUpdated()
         }
     }
 

@@ -71,6 +71,17 @@
             android:padding="10dp"
             android:textSize="16sp"/>
 
+        <ImageButton
+            android:id="@+id/refreshButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_refresh_24"
+            app:layout_constraintStart_toEndOf="@id/dateRetrievedTextView"
+            app:layout_constraintTop_toTopOf="@id/dateRetrievedTextView"
+            app:layout_constraintBottom_toBottomOf="@id/dateRetrievedTextView"
+            android:backgroundTint="@color/white"
+            android:contentDescription="@string/refresh_icon"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

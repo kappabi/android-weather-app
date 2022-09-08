@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">SimpleWeatherApp</string>
+    <string name="app_name">Weather</string>
     <string name="no_data_message">No data available.</string>
     <string name="a_z">A-Z</string>
     <string name="temperature">Temperature</string>
     <string name="last_updated">Last updated</string>
     <string name="data_retrieved">Data retrieved</string>
+    <string name="refresh_icon">Refresh icon</string>
 </resources>

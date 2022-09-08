@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -55,11 +56,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val tabLayout = getView()?.findViewById<TabLayout>(R.id.tab)
         tabLayout?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                when(tab?.position) {
-                    0 -> homeViewModel.sortAlphabetical()
-                    1 -> homeViewModel.sortTemperature()
-                    2 -> homeViewModel.sortLastUpdated()
-                }
+                homeViewModel.sortData(tab?.position)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -73,6 +70,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val dateRetrievedTextView = getView()?.findViewById<TextView>(R.id.dateRetrievedTextView)
         homeViewModel.dateRetrieved.observe(viewLifecycleOwner) {
             dateRetrievedTextView?.text = getString(R.string.data_retrieved) + ": ${it.format(DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy"))}"
+        }
+
+        // Set up refresh data button
+        val refreshButton = getView()?.findViewById<ImageButton>(R.id.refreshButton)
+        refreshButton?.setOnClickListener{
+            homeViewModel.getWeatherData(tabLayout?.selectedTabPosition)
         }
     }
 }
