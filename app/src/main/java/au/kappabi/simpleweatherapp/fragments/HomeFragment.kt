@@ -69,7 +69,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         // Show date data was last retrieved
         val dateRetrievedTextView = getView()?.findViewById<TextView>(R.id.dateRetrievedTextView)
         homeViewModel.dateRetrieved.observe(viewLifecycleOwner) {
-            dateRetrievedTextView?.text = getString(R.string.data_retrieved) + ": ${it.format(DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy"))}"
+            dateRetrievedTextView?.text = getString(R.string.data_retrieved) + ": ${it.format(DateTimeFormatter.ofPattern("HH:mm:ss dd-MM-yyyy"))}"
         }
 
         // Set up refresh data button
