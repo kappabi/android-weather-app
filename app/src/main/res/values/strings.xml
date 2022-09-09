@@ -6,4 +6,8 @@
     <string name="last_updated">Last updated</string>
     <string name="data_retrieved">Data retrieved</string>
     <string name="refresh_icon">Refresh icon</string>
+    <string name="feels_like">Feels Like</string>
+    <string name="humidity">Humidity</string>
+    <string name="wind">Wind</string>
+    <string name="last_updated_details">Last updated: </string>
 </resources>

@@ -4,6 +4,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.core.os.bundleOf
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import au.kappabi.simpleweatherapp.R
 import au.kappabi.simpleweatherapp.network.WeatherData
@@ -17,6 +20,7 @@ class WeatherListAdapter(val data: List<WeatherData>) : RecyclerView.Adapter<Wea
         private val suburbTextView : TextView = v.findViewById(R.id.suburbTextView)
         private val updatedTextView : TextView = v.findViewById(R.id.updatedTextView)
         private val temperatureTextView : TextView = v.findViewById(R.id.temperatureTextView)
+        private val cardView : CardView = v.findViewById(R.id.cardView)
 
         fun bind(weatherData: WeatherData, pos: Int, action: ((view: View) -> Unit)?){
 
@@ -29,12 +33,20 @@ class WeatherListAdapter(val data: List<WeatherData>) : RecyclerView.Adapter<Wea
             }
 
             // Format last updated date object
+            var lastUpdatedText = ""
             if (weatherData.lastUpdated != null) {
                 val date = Date(weatherData.lastUpdated)
                 val sdf = SimpleDateFormat("HH:mm dd-MMM-yyyy")
-                updatedTextView.text = sdf.format(date)
-            } else {
-                updatedTextView.text = ""
+                lastUpdatedText = sdf.format(date)
+            }
+            updatedTextView.text = lastUpdatedText
+
+            // Navigate to details fragment on card clicked
+            cardView.setOnClickListener {
+                val bundle = bundleOf("suburb" to weatherData.name, "summary" to weatherData.weatherCondition,
+                "temperature" to weatherData.temp, "feelslike" to weatherData.feelsLike, "humidity" to weatherData.humidity,
+                "wind" to weatherData.wind, "last_updated" to weatherData.lastUpdated)
+                it.findNavController().navigate(R.id.action_homeFragment_to_detailsFragment, bundle)
             }
 
         }
