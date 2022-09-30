@@ -7,22 +7,24 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import au.kappabi.simpleweatherapp.R
 import au.kappabi.simpleweatherapp.network.WeatherData
 import java.text.SimpleDateFormat
 import java.util.*
 
-class WeatherListAdapter(val data: List<WeatherData>) : RecyclerView.Adapter<WeatherListAdapter.WeatherListViewHolder>() {
+class WeatherDataAdapter : ListAdapter<WeatherData, WeatherDataAdapter.WeatherViewHolder>(WeatherDataDiffCallback) {
 
-    class WeatherListViewHolder(v: View): RecyclerView.ViewHolder(v) {
+    class WeatherViewHolder(v: View): RecyclerView.ViewHolder(v) {
 
         private val suburbTextView : TextView = v.findViewById(R.id.suburbTextView)
         private val updatedTextView : TextView = v.findViewById(R.id.updatedTextView)
         private val temperatureTextView : TextView = v.findViewById(R.id.temperatureTextView)
         private val cardView : CardView = v.findViewById(R.id.cardView)
 
-        fun bind(weatherData: WeatherData, pos: Int, action: ((view: View) -> Unit)?){
+        fun bind(weatherData: WeatherData){
 
             // Populate suburb and temperature views
             suburbTextView.text= weatherData.name
@@ -35,7 +37,7 @@ class WeatherListAdapter(val data: List<WeatherData>) : RecyclerView.Adapter<Wea
             // Format last updated date object
             var lastUpdatedText = ""
             if (weatherData.lastUpdated != null) {
-                val date = Date(weatherData.lastUpdated)
+                val date = Date(weatherData.lastUpdated*1000)
                 val sdf = SimpleDateFormat("HH:mm dd-MMM-yyyy")
                 lastUpdatedText = sdf.format(date)
             }
@@ -44,8 +46,8 @@ class WeatherListAdapter(val data: List<WeatherData>) : RecyclerView.Adapter<Wea
             // Navigate to details fragment on card clicked
             cardView.setOnClickListener {
                 val bundle = bundleOf("suburb" to weatherData.name, "summary" to weatherData.weatherCondition,
-                "temperature" to weatherData.temp, "feelslike" to weatherData.feelsLike, "humidity" to weatherData.humidity,
-                "wind" to weatherData.wind, "last_updated" to weatherData.lastUpdated)
+                    "temperature" to weatherData.temp, "feelslike" to weatherData.feelsLike, "humidity" to weatherData.humidity,
+                    "wind" to weatherData.wind, "last_updated" to weatherData.lastUpdated)
                 it.findNavController().navigate(R.id.action_homeFragment_to_detailsFragment, bundle)
             }
 
@@ -53,21 +55,23 @@ class WeatherListAdapter(val data: List<WeatherData>) : RecyclerView.Adapter<Wea
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherListViewHolder {
+    object WeatherDataDiffCallback : DiffUtil.ItemCallback<WeatherData>(){
+        override fun areItemsTheSame(oldItem: WeatherData, newItem: WeatherData): Boolean {
+            return oldItem.name == newItem.name
+        }
+
+        override fun areContentsTheSame(oldItem: WeatherData, newItem: WeatherData): Boolean {
+            return oldItem == newItem
+        }
+    }
+
+    override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
         val vg = LayoutInflater.from(parent.context)
             .inflate(R.layout.home_weather_item, parent, false)
-        return WeatherListViewHolder(vg)
+        return WeatherViewHolder(vg)
     }
-
-    override fun onBindViewHolder(holder: WeatherListViewHolder, position: Int) {
-
-        val weatherData = data[position]
-        holder.bind(weatherData, data.indexOf(weatherData),null )
-
-    }
-
-    override fun getItemCount(): Int {
-        return data.size
-    }
-
 }

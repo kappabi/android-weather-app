@@ -38,7 +38,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         val lastUpdatedTextView = getView()?.findViewById<TextView>(R.id.lastUpdatedTextView)
         var lastUpdatedText = ""
         if (lastUpdated != null) {
-            val date = Date(lastUpdated)
+            val date = Date(lastUpdated*1000)
             val sdf = SimpleDateFormat("HH:mm a dd MMMM yyyy")
             lastUpdatedText = getString(R.string.last_updated_details) + sdf.format(date)
         }

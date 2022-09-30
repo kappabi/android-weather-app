@@ -1,6 +1,6 @@
 # android-weather-app
 
-Simple android application that sources weather data from the web and display the details to the user. Includes functionality to sort alphatically, by temperature and by date last updated.
+Simple android application that sources weather data from the web and display the details to the user. Includes functionality to sort alphabetically, by temperature and by date last updated.
 
 
 Languages: Kotlin, XML
