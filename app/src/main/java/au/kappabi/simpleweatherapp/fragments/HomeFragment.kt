@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import au.kappabi.simpleweatherapp.R
 import au.kappabi.simpleweatherapp.adapters.WeatherDataAdapter
+import au.kappabi.simpleweatherapp.network.WeatherApi
+import au.kappabi.simpleweatherapp.network.WeatherApiService
 import au.kappabi.simpleweatherapp.viewmodels.HomeViewModel
 import com.google.android.material.tabs.TabLayout
 import java.time.format.DateTimeFormatter
@@ -21,7 +23,8 @@ import java.time.format.DateTimeFormatter
  */
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
-    val homeViewModel : HomeViewModel by activityViewModels()
+    val weatherApi = WeatherApi
+    val homeViewModel = HomeViewModel(weatherApi)
     val adapter = WeatherDataAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

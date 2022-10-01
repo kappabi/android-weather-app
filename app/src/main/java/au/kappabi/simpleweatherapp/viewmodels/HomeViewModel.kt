@@ -5,11 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import au.kappabi.simpleweatherapp.network.WeatherApi
+import au.kappabi.simpleweatherapp.network.WeatherApiService
 import au.kappabi.simpleweatherapp.network.WeatherData
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(val weatherApi : WeatherApi) : ViewModel() {
 
     private val _response = MutableLiveData<List<WeatherData>>()
     private val _dateRetrieved = MutableLiveData<LocalDateTime>()
@@ -35,8 +36,7 @@ class HomeViewModel : ViewModel() {
         _loaded.value = false
         viewModelScope.launch {
             try {
-                val response = WeatherApi.retrofitService.getWeather()
-                // TODO Include only suburbs with temperature data
+                val response = weatherApi.retrofitService.getWeather()
                 _response.value = response.data
                 sortData(sortOption)
                 _loaded.value = true
