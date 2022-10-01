@@ -7,7 +7,9 @@ Languages: Kotlin, XML
 
 Architecture: Single-Activity, MVVM
 
-Web service library: Retrofit2 with Moshi
+Web service library: Retrofit2, Moshi
 
-Asynchronous techniques: LiveData with Coroutines
+Asynchronous techniques: LiveData, Coroutines
+
+Unit testing: JUnit, Mockito
 
